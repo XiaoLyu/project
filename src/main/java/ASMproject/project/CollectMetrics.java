@@ -7,7 +7,6 @@ import java.util.List;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodNode;
-
 public class CollectMetrics {
 
 	public static void main(String args[]) throws Exception {
@@ -46,10 +45,11 @@ public class CollectMetrics {
         //  String argumentsList = arguments.getArgumentsList();
         int numOfArguments = arguments.getArgumentNum();
 
-        // collect variable declarations
-        VariableDeclarations vd = new VariableDeclarations(null);
+        // collect variable declarations and variable references
+        Variable vd = new Variable(null);
         method.accept(vd);
-        int variableDelarationNum = vd.getVariableNum();
+        int variableDelarationNum = vd.getVariableDeclarationNum();
+        int variableReferenceNum = vd.getVariableReferenceNum();
 
         // collect Halstead length
         Halstead halstead = new Halstead(null);
@@ -88,7 +88,8 @@ public class CollectMetrics {
         method.accept(lineCount);
         int lines = lineCount.getLines();
 
-        String result = methodName + "," + numOfArguments + "," + variableDelarationNum + "," +
+        String result = methodName + "," + numOfArguments + "," + variableDelarationNum +
+                "," + variableReferenceNum + ","+
                 halsteadLength + "," + halsteadVocabulary + "," + halsteadVolume + ","
                 + halsteadDifficulty + "," + halsteadEffort + "," +
                 halsteadBugs + "," + numOfOperators + "," + numOfOperands + ","
