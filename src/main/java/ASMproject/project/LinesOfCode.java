@@ -9,8 +9,8 @@ public class LinesOfCode extends MethodVisitor implements Opcodes {
 
   private int lines = 0;
 
-  public LinesOfCode(MethodVisitor delegate) {
-    super(ASM5, delegate);
+  public LinesOfCode(MethodVisitor mv) {
+    super(ASM5, mv);
   }
 
   @Override
