@@ -40,11 +40,61 @@ public class CollectMetrics {
         // collect class names and methods' names
 		String methodName = String.format("%s.%s", classNode.name, method.name);
 
+        // collect arguments
+        Arguments arguments = new Arguments(null);
+        method.accept(arguments);
+        //  String argumentsList = arguments.getArgumentsList();
+        int numOfArguments = arguments.getArgumentNum();
+
+        // collect variable declarations
+        VariableDeclarations vd = new VariableDeclarations(null);
+        method.accept(vd);
+        int variableDelarationNum = vd.getVariableNum();
+
+        // collect Halstead length
+        Halstead halstead = new Halstead(null);
+        method.accept(halstead);
+        long halsteadLength = halstead.info.HalsteadLength();
+
+        // collect Halstead vocabulary
+        long halsteadVocabulary = halstead.info.HalsteadVocabulary();
+
+        // collect Halstead volumne
+        double halsteadVolume = halstead.info.HalsteadVolume();
+
+        // collect Halstead difficulty
+        double halsteadDifficulty = halstead.info.HalsteadDifficulty();
+
+        // collect Halstead effort
+        double halsteadEffort = halstead.info.HalsteadEffort();
+
+        // collect Halstead bugs
+        double halsteadBugs = halstead.info.HalsteadBugs();
+
+        // collect number of operators
+        long numOfOperators = halstead.info.operatorsNum();
+
+        // collect number of operands
+        long numOfOperands = halstead.info.operandsNum();
+
+        // collect unique number of operators
+        long uniOperators = halstead.info.uniqueOperatorsNum();
+
+        // collect unique number of operands
+        long uniOperands = halstead.info.uniqueOperandsNum();
+
         // collect lines of code
-		LinesOfCode lineCount = new LinesOfCode(null);
-		method.accept(lineCount);
-		int lines = lineCount.getLines();
-		return methodName + "," + lines;
+        LinesOfCode lineCount = new LinesOfCode(null);
+        method.accept(lineCount);
+        int lines = lineCount.getLines();
+
+        String result = methodName + "," + numOfArguments + "," + variableDelarationNum + "," +
+                halsteadLength + "," + halsteadVocabulary + "," + halsteadVolume + ","
+                + halsteadDifficulty + "," + halsteadEffort + "," +
+                halsteadBugs + "," + numOfOperators + "," + numOfOperands + ","
+                + uniOperators + "," + uniOperands + "," + lines;
+
+		return result;
 	}
 
 }
