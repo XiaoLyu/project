@@ -143,6 +143,7 @@ public class Halstead extends MethodVisitor implements Opcodes {
     }
 
     //1 operand, 1 operator
+    //This opcode is either NEW, ANEWARRAY, CHECKCAST or INSTANCEOF.
     @Override
     public void visitTypeInsn(int opcode, String type) {
         info.addOperator(Integer.toString(opcode));
@@ -151,6 +152,7 @@ public class Halstead extends MethodVisitor implements Opcodes {
     }
 
     //1 operand, 1 operator
+    //This opcode is either GETSTATIC, PUTSTATIC, GETFIELD or PUTFIELD.
     @Override
     public void visitFieldInsn(int opcode, String owner, String name, String desc) {
         info.addOperator(Integer.toString(opcode));
@@ -176,6 +178,7 @@ public class Halstead extends MethodVisitor implements Opcodes {
     }
 
     //1 operand
+    // if else
     @Override
     public void visitLdcInsn(Object cst) {
         info.addOperand(cst);
@@ -183,6 +186,7 @@ public class Halstead extends MethodVisitor implements Opcodes {
     }
 
     //1 operator, 2 operands
+    // increment local variable
     @Override
     public void visitIincInsn(int var, int increment) {
         info.addOperator("increment");
