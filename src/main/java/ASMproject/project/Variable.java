@@ -4,7 +4,6 @@ package ASMproject.project;
 import org.objectweb.asm.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -17,7 +16,7 @@ public class Variable extends MethodVisitor implements Opcodes {
 
     private int variableDeclarationNum = 0;
     private int variableReferenceNum = 0;
-    private List<String> nameList = new ArrayList<>();
+//    private List<String> nameList = new ArrayList<>();
 
     @Override
     public void visitLocalVariable(String name, String desc, String signature, Label start, Label end, int index) {
@@ -27,7 +26,7 @@ public class Variable extends MethodVisitor implements Opcodes {
         if(!name.equals("this")){
             if(desc.length() > 1){
                 variableReferenceNum ++;
-                nameList.add(desc);
+                //               nameList.add(desc);
             }
         }
         super.visitLocalVariable(name, desc, signature, start, end, index);
@@ -44,7 +43,7 @@ public class Variable extends MethodVisitor implements Opcodes {
         return Math.max(variableReferenceNum, 0);
     }
 
-    public List<String> getNameList(){
-        return nameList;
-    }
- }
+//    public List<String> getNameList(){
+//        return nameList;
+//    }
+}
