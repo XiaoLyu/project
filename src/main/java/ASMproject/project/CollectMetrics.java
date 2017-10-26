@@ -59,7 +59,7 @@ public class CollectMetrics {
         // collect Halstead vocabulary
         long halsteadVocabulary = halstead.info.HalsteadVocabulary();
 
-        // collect Halstead volumne
+        // collect Halstead volume
         double halsteadVolume = halstead.info.HalsteadVolume();
 
         // collect Halstead difficulty
@@ -70,6 +70,11 @@ public class CollectMetrics {
 
         // collect Halstead bugs
         double halsteadBugs = halstead.info.HalsteadBugs();
+
+        // collect number of casting
+        Casting casting = new Casting(null);
+        method.accept(casting);
+        int castingNum = casting.getCastingNum();
 
         // collect number of operators
         long numOfOperators = halstead.info.operatorsNum();
@@ -97,8 +102,8 @@ public class CollectMetrics {
                 "," + variableReferenceNum + ","+
                 halsteadLength + "," + halsteadVocabulary + "," + halsteadVolume + ","
                 + halsteadDifficulty + "," + halsteadEffort + "," +
-                halsteadBugs + "," + numOfOperators + "," + numOfOperands + ","
-                + uniOperators + "," + uniOperands + "," + modi + "," + lines;
+                halsteadBugs + "," + castingNum + "," + numOfOperators + "," + numOfOperands + ","
+                + uniOperators + "," + uniOperands + "," + modi + "," + lines ;
 
         return result;
     }
