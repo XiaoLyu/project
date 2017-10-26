@@ -52,8 +52,10 @@ public class ClassReferences extends MethodVisitor implements Opcodes {
 
             //get rid the ';' in the end
             String[] part2 = tempart.split(";");
-            finalpart = finalpart + part2[0] + " ";
-
+            finalpart = finalpart + part2[0];
+            if (i < temp.size() - 1){
+                finalpart = finalpart + " ";
+            }
         }
 
         classReferencesNames = classReferencesNames + finalpart;
