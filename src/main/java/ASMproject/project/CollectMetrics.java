@@ -42,7 +42,6 @@ public class CollectMetrics {
         // collect arguments
         Arguments arguments = new Arguments(null);
         method.accept(arguments);
-        //  String argumentsList = arguments.getArgumentsList();
         int numOfArguments = arguments.getArgumentNum();
 
         // collect variable declarations and variable references
@@ -88,6 +87,24 @@ public class CollectMetrics {
         // collect unique number of operands
         long uniOperands = halstead.info.uniqueOperandsNum();
 
+        // class references
+        ClassReferences cl = new ClassReferences(null);
+        method.accept(cl);
+        String classReferenceNames = cl.getClassReferencesNames();
+
+        // collect exception information
+        // exception referenced
+        ExceptionReference exceptionInfo = new ExceptionReference(null);
+        method.accept(exceptionInfo);
+        //      List<String> exinfo = exceptionInfo.getExceptionsNameList();
+        String exName = exceptionInfo.getExceptionsName();
+
+        // exception thrown
+        ExceptionThrown ex = new ExceptionThrown(null);
+        method.accept(ex);
+//        List<String> exList = ex.getNames();
+        String exThrown = ex.getExceptionThrown();
+
         // collect modifiers
         Modifiers modifiers = new Modifiers(null);
         method.accept(modifiers);
@@ -103,7 +120,8 @@ public class CollectMetrics {
                 halsteadLength + "," + halsteadVocabulary + "," + halsteadVolume + ","
                 + halsteadDifficulty + "," + halsteadEffort + "," +
                 halsteadBugs + "," + castingNum + "," + numOfOperators + "," + numOfOperands + ","
-                + uniOperators + "," + uniOperands + "," + modi + "," + lines ;
+                + uniOperators + "," + uniOperands + "," + classReferenceNames +  "," + exName + ","
+                + exThrown + "," + modi + "," + lines;
 
         return result;
     }
