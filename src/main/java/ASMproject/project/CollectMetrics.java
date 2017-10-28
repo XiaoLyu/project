@@ -1,8 +1,7 @@
 package ASMproject.project;
 
 import java.io.FileInputStream;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.tree.ClassNode;
@@ -92,6 +91,50 @@ public class CollectMetrics {
         method.accept(cl);
         String classReferenceNames = cl.getClassReferencesNames();
 
+        // collect method info
+        Methods mt = new Methods(null);
+        method.accept(mt);
+
+        Set<String> localMethodsList = new HashSet<>();
+        Set<String> externalMethodsList = new HashSet<>();
+
+        String localMethods = "";
+        String externalMethods = "";
+
+        List<String> methodList = mt.getMethodList();
+        List<String> classList = mt.getClassNameList();
+
+        for (int i = 0; i < classList.size(); i++){
+            if(classList.get(i).equals(classNode.name)){
+                localMethodsList.add(methodList.get(i));
+            }
+            if(! classList.get(i).equals(classNode.name)){
+                externalMethodsList.add(methodList.get(i));
+            }
+        }
+
+        Object[] array1 = localMethodsList.toArray();
+        Object[] array2 = externalMethodsList.toArray();
+
+        int lenOfLocal = array1.length;
+        int lenOfExter = array2.length;
+
+        // convert set to string for local methods
+        for(int i = 0; i < lenOfLocal; i++){
+            localMethods = localMethods + array1[i];
+            if (i < (lenOfLocal - 1)){
+                localMethods = localMethods + " ";
+            }
+        }
+
+        // convert set to string for external methods
+        for(int i = 0; i < lenOfExter; i++){
+            externalMethods = externalMethods + array2[i];
+            if(i < (lenOfExter - 1)){
+                externalMethods = externalMethods + " ";
+            }
+        }
+
         // collect exception information
         // exception referenced
         ExceptionReference exceptionInfo = new ExceptionReference(null);
@@ -116,12 +159,12 @@ public class CollectMetrics {
         int lines = lineCount.getLines();
 
         String result = methodName + "," + numOfArguments + "," + variableDelarationNum +
-                "," + variableReferenceNum + ","+
-                halsteadLength + "," + halsteadVocabulary + "," + halsteadVolume + ","
-                + halsteadDifficulty + "," + halsteadEffort + "," +
-                halsteadBugs + "," + castingNum + "," + numOfOperators + "," + numOfOperands + ","
-                + uniOperators + "," + uniOperands + "," + classReferenceNames +  "," + exName + ","
-                + exThrown + "," + modi + "," + lines;
+                "," + variableReferenceNum + ","+ halsteadLength + "," + halsteadVocabulary
+                + "," + halsteadVolume + "," + halsteadDifficulty + "," + halsteadEffort +
+                "," + halsteadBugs + "," + castingNum + "," + numOfOperators + "," +
+                numOfOperands + "," + uniOperators + "," + uniOperands + "," + classReferenceNames
+                + "," + localMethods + "," + externalMethods +  "," + exName + "," + exThrown
+                + "," + modi + "," + lines;
 
         return result;
     }
