@@ -1,11 +1,13 @@
 package ASMproject.project;
 
-import java.io.FileInputStream;
+import java.io.*;
 import java.util.*;
 
+import com.opencsv.CSVWriter;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodNode;
+
 public class CollectMetrics {
 
     public static void main(String args[]) throws Exception {
@@ -22,18 +24,34 @@ public class CollectMetrics {
         ClassNode classNode = new ClassNode();
         reader.accept(classNode, 0);
 
-        System.out.println(String.join(",", Arrays.asList(new String[] { "MethodName","CyclomaticComplexity",
-                "NumberOfArguments", "VariableReferences", "HalsteadLength", "HalsteadVocabulary"," HalsteadVolume",
-                "HalsteadDifficulty","HalsteadEffort","HalsteadBugs", "NumberOfCasts", "NumberOfOperators",
-                "NumberOfOperands", "ClassReferences", "ExternalMethods", "LocalMethods", "ExceptionsReferenced",
-                "ExceptionsThrown", "Modifiers", "LinesOfCode"})));
+        String[] header = {"Method Name",
+                "Number Of Arguments", "Variable Declarations", "Variable References", "Halstead Length",
+                "Halstead Vocabulary"," Halstead Volume",
+                "Halstead Difficulty","Halstead Effort", "Halstead Bugs", "Number Of Casts", "Number Of Operators",
+                "Number Of Operands", "Class References", "External Methods", "Local Methods", "Exceptions Referenced",
+                "Exceptions Thrown", "Modifiers", "Lines Of Code"};
 
-        System.out.printf("Calculating metrics for each method\n");
+   //     System.out.println(String.join(",", Arrays.asList(header)));
+
+        // write to csv file
+        // needed to be modified when write all the files
+        File file = new File("result/test1.csv");
+        CSVWriter csvWrite = new CSVWriter(new FileWriter(file));
+
+        // add headers
+        csvWrite.writeNext(header);
+
+  //      System.out.printf("Calculating metrics for each method\n");
 
         for (MethodNode method : (List<MethodNode>) classNode.methods) {
             String metrics = collectMetrics(classNode, method);
-            System.out.println(metrics);
+  //          System.out.println(metrics);
+
+            // add body
+            csvWrite.writeNext(metrics.split(","));
         }
+
+        csvWrite.close();
 
 //		}
 
