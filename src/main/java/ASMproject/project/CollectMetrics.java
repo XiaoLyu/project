@@ -10,10 +10,10 @@ public class CollectMetrics {
 
     public static void main(String args[]) throws Exception {
 
-        System.out.println(String.join(",", Arrays.asList(new String[] { "methodName", "linesOfCode"})));
 //		for (int i=0;i< args.length;i++) {
 //			String arg = args[i];
         String arg = "resource/aalto-xml/classes/com/fasterxml/aalto/async/AsyncByteScanner.class";
+
         System.out.printf("Calculating metrics for class file %s\n", arg);
         FileInputStream is = new FileInputStream(arg);
 
@@ -22,7 +22,13 @@ public class CollectMetrics {
         ClassNode classNode = new ClassNode();
         reader.accept(classNode, 0);
 
-        System.out.printf("Calculating metrics for each method");
+        System.out.println(String.join(",", Arrays.asList(new String[] { "MethodName","CyclomaticComplexity",
+                "NumberOfArguments", "VariableReferences", "HalsteadLength", "HalsteadVocabulary"," HalsteadVolume",
+                "HalsteadDifficulty","HalsteadEffort","HalsteadBugs", "NumberOfCasts", "NumberOfOperators",
+                "NumberOfOperands", "ClassReferences", "ExternalMethods", "LocalMethods", "ExceptionsReferenced",
+                "ExceptionsThrown", "Modifiers", "LinesOfCode"})));
+
+        System.out.printf("Calculating metrics for each method\n");
 
         for (MethodNode method : (List<MethodNode>) classNode.methods) {
             String metrics = collectMetrics(classNode, method);
@@ -42,6 +48,7 @@ public class CollectMetrics {
         Arguments arguments = new Arguments(null);
         method.accept(arguments);
         int numOfArguments = arguments.getArgumentNum();
+ //       List<String> referenceList = arguments.getReferencesList();
 
         // collect variable declarations and variable references
         Variable vd = new Variable(null);
@@ -81,10 +88,10 @@ public class CollectMetrics {
         long numOfOperands = halstead.info.operandsNum();
 
         // collect unique number of operators
-        long uniOperators = halstead.info.uniqueOperatorsNum();
+//        long uniOperators = halstead.info.uniqueOperatorsNum();
 
         // collect unique number of operands
-        long uniOperands = halstead.info.uniqueOperandsNum();
+//        long uniOperands = halstead.info.uniqueOperandsNum();
 
         // class references
         ClassReferences cl = new ClassReferences(null);
@@ -95,8 +102,8 @@ public class CollectMetrics {
         Methods mt = new Methods(null);
         method.accept(mt);
 
-        Set<String> localMethodsList = new HashSet<>();
-        Set<String> externalMethodsList = new HashSet<>();
+        Set<String> localMethodsList = new HashSet<String>();
+        Set<String> externalMethodsList = new HashSet<String>();
 
         String localMethods = "";
         String externalMethods = "";
@@ -162,9 +169,8 @@ public class CollectMetrics {
                 "," + variableReferenceNum + ","+ halsteadLength + "," + halsteadVocabulary
                 + "," + halsteadVolume + "," + halsteadDifficulty + "," + halsteadEffort +
                 "," + halsteadBugs + "," + castingNum + "," + numOfOperators + "," +
-                numOfOperands + "," + uniOperators + "," + uniOperands + "," + classReferenceNames
-                + "," + localMethods + "," + externalMethods +  "," + exName + "," + exThrown
-                + "," + modi + "," + lines;
+                numOfOperands + ","  + classReferenceNames + "," + localMethods + ","
+                + externalMethods +  "," + exName + "," + exThrown + "," + modi + "," + lines;
 
         return result;
     }
