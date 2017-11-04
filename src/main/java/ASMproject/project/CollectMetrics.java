@@ -12,50 +12,53 @@ public class CollectMetrics {
 
     public static void main(String args[]) throws Exception {
 
-//		for (int i=0;i< args.length;i++) {
-//			String arg = args[i];
-        String arg = "resource/aalto-xml/classes/com/fasterxml/aalto/async/AsyncByteScanner.class";
-
-        System.out.printf("Calculating metrics for class file %s\n", arg);
-        FileInputStream is = new FileInputStream(arg);
-
-        ClassReader reader = new ClassReader(is);
-
-        ClassNode classNode = new ClassNode();
-        reader.accept(classNode, 0);
+        String arg = "resource/aalto-xml";
+        FindAllClassFile className = new FindAllClassFile();
+        List<String> classFileNames = className.findAllClassFile(arg);
 
         String[] header = {"Method Name",
                 "Number Of Arguments", "Variable Declarations", "Variable References", "Halstead Length",
-                "Halstead Vocabulary"," Halstead Volume",
-                "Halstead Difficulty","Halstead Effort", "Halstead Bugs", "Number Of Casts", "Number Of Operators",
+                "Halstead Vocabulary", " Halstead Volume",
+                "Halstead Difficulty", "Halstead Effort", "Halstead Bugs", "Number Of Casts", "Number Of Operators",
                 "Number Of Operands", "Class References", "External Methods", "Local Methods", "Exceptions Referenced",
                 "Exceptions Thrown", "Modifiers", "Lines Of Code"};
 
-   //     System.out.println(String.join(",", Arrays.asList(header)));
+        //     System.out.println(String.join(",", Arrays.asList(header)));
 
         // write to csv file
         // needed to be modified when write all the files
-        File file = new File("result/test1.csv");
+        String[] testNames = arg.split("/");
+        String testName = testNames[1];
+        String nameOfFile = "result/" + testName + ".csv";
+        File file = new File(nameOfFile);
         CSVWriter csvWrite = new CSVWriter(new FileWriter(file));
 
         // add headers
         csvWrite.writeNext(header);
 
-  //      System.out.printf("Calculating metrics for each method\n");
+        for (int i = 0; i < classFileNames.size(); i++) {
+            String classPath = classFileNames.get(i);
+            System.out.printf("Calculating metrics for class file %s\n", classPath);
+            FileInputStream is = new FileInputStream(classPath);
 
-        for (MethodNode method : (List<MethodNode>) classNode.methods) {
-            String metrics = collectMetrics(classNode, method);
-  //          System.out.println(metrics);
 
-            // add body
-            csvWrite.writeNext(metrics.split(","));
+            ClassReader reader = new ClassReader(is);
+
+            ClassNode classNode = new ClassNode();
+            reader.accept(classNode, 0);
+
+            for (MethodNode method : (List<MethodNode>) classNode.methods) {
+                String metrics = collectMetrics(classNode, method);
+                //          System.out.println(metrics);
+
+                // add body
+                csvWrite.writeNext(metrics.split(","));
+            }
         }
-
         csvWrite.close();
 
-//		}
 
-    }
+}
 
     private static String collectMetrics(ClassNode classNode, MethodNode method) {
 
