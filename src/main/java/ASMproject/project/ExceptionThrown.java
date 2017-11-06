@@ -20,7 +20,7 @@ public class ExceptionThrown extends MethodVisitor implements Opcodes {
         super(ASM5, mv);
     }
 
-    private List<String> names = new ArrayList<>();
+    private List<String> names = new ArrayList<String>();
     private String exceptionThrown = "";
     private String temp = "";
 
@@ -30,11 +30,13 @@ public class ExceptionThrown extends MethodVisitor implements Opcodes {
             names.add(owner);
             String[] part = owner.split("/");
             temp = part[part.length-1];
+
+            for(int i = 0; i < (getNames().size() - 1); i++){
+                exceptionThrown = exceptionThrown + " ";
+            }
             exceptionThrown = exceptionThrown + temp;
         }
-        for(int i = 0; i < (getNames().size() - 1); i++){
-            exceptionThrown = exceptionThrown + " ";
-        }
+
         super.visitMethodInsn(opcode, owner, name, desc, itf);
     }
 
