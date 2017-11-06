@@ -19,10 +19,11 @@ public class ClassReferences extends MethodVisitor implements Opcodes {
         super(ASM5, mv);
     }
 
-    Set<String> classReferencesSet = new HashSet<>();
-    List<String> classReferencesList = new ArrayList<>();
+    Set<String> classReferencesSet = new HashSet<String>();
+    List<String> classReferencesList = new ArrayList<String>();
 
     String classReferencesNames = "";
+    String s = "";
 
     @Override
     public void visitLocalVariable(String name, String desc, String signature, Label start, Label end, int index) {
@@ -52,7 +53,10 @@ public class ClassReferences extends MethodVisitor implements Opcodes {
 
             //get rid the ';' in the end
             String[] part2 = tempart.split(";");
-            finalpart = finalpart + part2[0];
+
+            s = part2[0].replace("[", "[]");
+
+            finalpart = finalpart + s;
             if (i < temp.size() - 1){
                 finalpart = finalpart + " ";
             }
