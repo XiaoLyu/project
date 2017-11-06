@@ -174,7 +174,7 @@ public class CollectMetrics {
         ExceptionThrown ex = new ExceptionThrown(null);
         method.accept(ex);
 //        List<String> exList = ex.getNames();
-        String exThrown = ex.getExceptionThrown();
+        String exThrown = ex.getNames();
 
         // collect modifiers
         Modifiers modifiers = new Modifiers(null);
