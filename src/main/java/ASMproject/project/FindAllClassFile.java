@@ -14,12 +14,17 @@ public class FindAllClassFile {
 
     public List<String> findAllClassFile(String folder){
         File directory = new File(folder);
+        if(directory.isFile()){
+            p.add(folder);
+            return p;
+        }
+
         File[] files = directory.listFiles();
 
         for (File file : files) {
             if (file.isFile()) {
                 if(file.getName().endsWith(".class")) {
-                    System.out.println("File: " + file.getAbsolutePath());
+//                    System.out.println("File: " + file.getAbsolutePath());
                     p.add(file.getAbsolutePath());
                 }
 
