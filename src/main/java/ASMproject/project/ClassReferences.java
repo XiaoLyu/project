@@ -48,19 +48,32 @@ public class ClassReferences extends MethodVisitor implements Opcodes {
 
         for(int i = 0; i< temp.size(); i++){
             String[] part1 = temp.get(i).split("/");
+
             int indexNum = part1.length - 1;
             tempart = part1[indexNum];
 
             //get rid the ';' in the end
             String[] part2 = tempart.split(";");
 
-            s = part2[0].replace("[", "[]");
+            s = part2[0].replace("[", "");
+
+            for(int j = 0; j < part1.length; j++){
+                if(part1[j].contains("[")){
+                    s = s + "[]";
+                }
+            }
+
+            s = s.replace("Z[]", "boolean[]").replace("C[]", "char[]").replace("B[]", "byte[]").replace("S[]", "short[]").
+                    replace("I[]", "int[]").replace("F[]", "float[]").replace("J[]", "long[]").replace("D[]", "double[]");
 
             finalpart = finalpart + s;
+
             if (i < temp.size() - 1){
                 finalpart = finalpart + " ";
             }
         }
+
+
 
         classReferencesNames = classReferencesNames + finalpart;
 
