@@ -7,7 +7,9 @@ import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.commons.Method;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by lyuxiao on 10/26/17.
@@ -23,28 +25,41 @@ public class ExceptionThrown extends MethodVisitor implements Opcodes {
     private List<String> names = new ArrayList<String>();
     private String exceptionThrown = "";
     private String temp = "";
+    Set<String> exceptionThrownSet = new HashSet<String>();
 
     @Override
     public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
         if(owner.contains("Exception")){
-            names.add(owner);
-            String[] part = owner.split("/");
-            temp = part[part.length-1];
+        //    names.add(owner);
+            exceptionThrownSet.add(owner);
 
-            for(int i = 0; i < (getNames().size() - 1); i++){
-                exceptionThrown = exceptionThrown + " ";
-            }
-            exceptionThrown = exceptionThrown + temp;
+//            String[] part = owner.split("/");
+//            temp = part[part.length-1];
+//
+//            for(int i = 0; i < (getNames().size() - 1); i++){
+//                exceptionThrown = exceptionThrown + " ";
+//            }
+//            exceptionThrown = exceptionThrown + temp;
         }
 
         super.visitMethodInsn(opcode, owner, name, desc, itf);
     }
 
-    public List<String> getNames(){
-        return names;
-    }
+    public String getNames(){
+        names.addAll(exceptionThrownSet);
 
-    public String getExceptionThrown(){
+        for(int j = 0; j < names.size(); j++){
+            String[] part = names.get(j).split("/");
+            temp = part[part.length-1];
+
+            exceptionThrown = exceptionThrown + temp;
+
+            for(int i = 0; i < (names.size() - 1); i++){
+                exceptionThrown = exceptionThrown + " ";
+            }
+
+        }
+
         return exceptionThrown;
     }
 }
