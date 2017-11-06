@@ -12,7 +12,8 @@ public class CollectMetrics {
 
     public static void main(String args[]) throws Exception {
 
-        String arg = "resource/aalto-xml";
+  //      String arg = "resource/aalto-xml";
+      	String arg = args[0];
         FindAllClassFile className = new FindAllClassFile();
         List<String> classFileNames = className.findAllClassFile(arg);
 
@@ -28,7 +29,7 @@ public class CollectMetrics {
         // write to csv file
         // needed to be modified when write all the files
         String[] testNames = arg.split("/");
-        String testName = testNames[1];
+        String testName = testNames[testNames.length-1];
         String nameOfFile = "result/" + testName + ".csv";
         File file = new File(nameOfFile);
         CSVWriter csvWrite = new CSVWriter(new FileWriter(file));
@@ -38,9 +39,8 @@ public class CollectMetrics {
 
         for (int i = 0; i < classFileNames.size(); i++) {
             String classPath = classFileNames.get(i);
-            System.out.printf("Calculating metrics for class file %s\n", classPath);
+//            System.out.printf("Calculating metrics for class file %s\n", classPath);
             FileInputStream is = new FileInputStream(classPath);
-
 
             ClassReader reader = new ClassReader(is);
 
@@ -49,7 +49,7 @@ public class CollectMetrics {
 
             for (MethodNode method : (List<MethodNode>) classNode.methods) {
                 String metrics = collectMetrics(classNode, method);
-                //          System.out.println(metrics);
+  //                        System.out.println(metrics);
 
                 // add body
                 csvWrite.writeNext(metrics.split(","));
