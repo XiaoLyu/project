@@ -17,8 +17,8 @@ public class Halstead extends MethodVisitor implements Opcodes {
     }
 
     public class Info{
-        private List<String> operatorList = new ArrayList<>();
-        private List<Object> operandList = new ArrayList<>();
+        private List<String> operatorList = new ArrayList<String>();
+        private List<Object> operandList = new ArrayList<Object>();
 
         public void addOperator(String operator){
             operatorList.add(operator);
@@ -32,7 +32,7 @@ public class Halstead extends MethodVisitor implements Opcodes {
         public long operatorsNum(){
             long size = operatorList.size();
             if(size < 1){
-                System.out.printf("0 operator! Default to 1!\n");
+//                System.out.printf("0 operator! Default to 1!\n");
                 return 1;
             }
             return size;
@@ -42,7 +42,7 @@ public class Halstead extends MethodVisitor implements Opcodes {
         public long operandsNum(){
             long size = operandList.size();
             if(size < 1){
-                System.out.printf("0 operand! Default to 1!\n");
+   //             System.out.printf("0 operand! Default to 1!\n");
                 return 1;
             }
             return size;
@@ -52,7 +52,7 @@ public class Halstead extends MethodVisitor implements Opcodes {
         public long uniqueOperatorsNum(){
             long size = operatorList.stream().distinct().count();
             if (size < 1){
-                System.out.printf("0 unique operator! Default to 1!\n");
+     //           System.out.printf("0 unique operator! Default to 1!\n");
                 return 1;
             }
             return size;
@@ -62,7 +62,7 @@ public class Halstead extends MethodVisitor implements Opcodes {
         public long uniqueOperandsNum(){
             long size = operandList.stream().distinct().count();
             if (size < 1){
-                System.out.printf("0 unique operator! Default to 1!\n");
+      //          System.out.printf("0 unique operator! Default to 1!\n");
                 return 1;
             }
             return size;
