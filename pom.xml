@@ -15,22 +15,16 @@
   </properties>
 
   <dependencies>
- 	 <dependency>
+      <dependency>
         <groupId>org.ow2.asm</groupId>
         <artifactId>asm-all</artifactId>
         <version>5.1</version>
-    </dependency>
+      </dependency>
       <dependency>
           <groupId>com.opencsv</groupId>
           <artifactId>opencsv</artifactId>
           <version>4.0</version>
-     </dependency>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
-    </dependency>
+      </dependency>
   </dependencies>
 
     <build>
@@ -60,5 +54,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>
