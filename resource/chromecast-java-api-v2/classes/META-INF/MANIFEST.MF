@@ -1,0 +1,21 @@
+Manifest-Version: 1.0
+Bnd-LastModified: 1510114777918
+Build-Jdk: 1.8.0_91
+Built-By: lyuxiao
+Bundle-Description: Java implementation of ChromeCast V2 protocol client
+Bundle-License: http://www.apache.org/licenses/LICENSE-2.0.txt
+Bundle-ManifestVersion: 2
+Bundle-Name: ChromeCast Java API v2
+Bundle-SymbolicName: su.litvak.chromecast.api-v2
+Bundle-Version: 0.10.2.SNAPSHOT
+Created-By: Apache Maven Bundle Plugin
+Export-Package: su.litvak.chromecast.api.v2;uses:="com.google.protobuf,o
+ rg.codehaus.jackson.annotate,org.codehaus.jackson.map.annotate";version
+ ="0.10.2"
+Import-Package: com.google.protobuf;version="[2.5,3)",javax.jmdns;versio
+ n="[3.4,4)",javax.net.ssl,org.codehaus.jackson;version="[1.9,2)",org.co
+ dehaus.jackson.annotate;version="[1.9,2)",org.codehaus.jackson.map;vers
+ ion="[1.9,2)",org.codehaus.jackson.map.annotate;version="[1.9,2)",org.s
+ lf4j;version="[1.8,2)"
+Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.6))"
+Tool: Bnd-3.0.0.201509101326
