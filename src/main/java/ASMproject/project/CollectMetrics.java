@@ -62,8 +62,10 @@ public class CollectMetrics {
 
     private static String collectMetrics(ClassNode classNode, MethodNode method) {
 
+        String desAll = method.desc;
+
         // collect class names and methods' names
-        String methodName = String.format("%s.%s", classNode.name, method.name);
+        String methodName = String.format("%s.%s:%s", classNode.name, method.name, desAll);
 
         // collect arguments
         Arguments arguments = new Arguments(null);
