@@ -1,19 +1,33 @@
 package ASMproject.project;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.util.*;
 
 import com.opencsv.CSVWriter;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.analysis.AnalyzerException;
 
-public class CollectMetrics {
+import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 
-    public static void main(String args[]) throws Exception {
+@Mojo(name = "collectMetrics")
+public class CollectMetrics extends AbstractMojo{
 
-  //      String arg = "resource/aalto-xml";
-      	String arg = args[0];
+    @Parameter (defaultValue="{project.basedir}", required=true, readonly=true)
+    public File inputPath;
+
+    public void execute() throws MojoExecutionException, MojoFailureException {
+        // folder path
+        String arg = inputPath.getParent();
+        // file name
+        String fName = inputPath.getParentFile().getName();
+
         FindAllClassFile className = new FindAllClassFile();
         List<String> classFileNames = className.findAllClassFile(arg);
 
@@ -22,45 +36,66 @@ public class CollectMetrics {
                 "Halstead Vocabulary", " Halstead Volume",
                 "Halstead Difficulty", "Halstead Effort", "Halstead Bugs", "Number Of Casts", "Number Of Operators",
                 "Number Of Operands", "Class References", "External Methods", "Local Methods", "Exceptions Referenced",
-                "Exceptions Thrown", "Modifiers", "Lines Of Code"};
+                "Exceptions Thrown", "Modifiers", "Lines Of Code", "Cyclomatic Complexity"};
 
         //     System.out.println(String.join(",", Arrays.asList(header)));
 
         // write to csv file
         // needed to be modified when write all the files
-        String[] testNames = arg.split("/");
-        String testName = testNames[testNames.length-1];
-        String nameOfFile = "result/" + testName + ".csv";
-        File file = new File(nameOfFile);
-        CSVWriter csvWrite = new CSVWriter(new FileWriter(file));
 
-        // add headers
-        csvWrite.writeNext(header);
+        String dire = arg + "/result";
 
-        for (int i = 0; i < classFileNames.size(); i++) {
-            String classPath = classFileNames.get(i);
-//            System.out.printf("Calculating metrics for class file %s\n", classPath);
-            FileInputStream is = new FileInputStream(classPath);
+        String nameOfFile = arg + "/result/" + fName +  ".csv";
 
-            ClassReader reader = new ClassReader(is);
+        File directory = new File(dire);
 
-            ClassNode classNode = new ClassNode();
-            reader.accept(classNode, 0);
-
-            for (MethodNode method : (List<MethodNode>) classNode.methods) {
-                String metrics = collectMetrics(classNode, method);
-  //                        System.out.println(metrics);
-
-                // add body
-                csvWrite.writeNext(metrics.split(","));
-            }
+        if (! directory.exists()){
+            directory.mkdir();
         }
-        csvWrite.close();
 
+        File file = new File(nameOfFile);
 
-}
+        CSVWriter csvWrite;
+        try {
+            csvWrite = new CSVWriter(new FileWriter(file));
 
-    private static String collectMetrics(ClassNode classNode, MethodNode method) {
+            // add headers
+            csvWrite.writeNext(header);
+
+            for (int i = 0; i < classFileNames.size(); i++) {
+                String classPath = classFileNames.get(i);
+                //            System.out.printf("Calculating metrics for class file %s\n", classPath);
+                FileInputStream is = new FileInputStream(classPath);
+
+                ClassReader reader = new ClassReader(is);
+
+                ClassNode classNode = new ClassNode();
+                reader.accept(classNode, 0);
+
+                for (MethodNode method : (List<MethodNode>) classNode.methods) {
+                    String metrics;
+                    try {
+                        metrics = collectMetrics(classNode, method);
+
+                        //                        System.out.println(metrics);
+
+                        // add body
+                        csvWrite.writeNext(metrics.split(","));
+                    } catch (AnalyzerException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                }
+            }
+            csvWrite.close();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+    }
+
+    private static String collectMetrics(ClassNode classNode, MethodNode method) throws AnalyzerException {
 
         String desAll = method.desc;
 
@@ -71,7 +106,7 @@ public class CollectMetrics {
         Arguments arguments = new Arguments(null);
         method.accept(arguments);
         int numOfArguments = arguments.getArgumentNum();
- //       List<String> referenceList = arguments.getReferencesList();
+        //       List<String> referenceList = arguments.getReferencesList();
 
         // collect variable declarations and variable references
         Variable vd = new Variable(null);
@@ -188,14 +223,17 @@ public class CollectMetrics {
         method.accept(lineCount);
         int lines = lineCount.getLines();
 
+        // collect cyclomatic complexity
+        CyclomaticComplexity complexity = new CyclomaticComplexity();
+        int cyclomaticComplexity = complexity.getCyclomaticComplexity(classNode.name, method);
+
         String result = methodName + "," + numOfArguments + "," + variableDelarationNum +
                 "," + variableReferenceNum + ","+ halsteadLength + "," + halsteadVocabulary
                 + "," + halsteadVolume + "," + halsteadDifficulty + "," + halsteadEffort +
                 "," + halsteadBugs + "," + castingNum + "," + numOfOperators + "," +
                 numOfOperands + ","  + classReferenceNames + "," + localMethods + ","
-                + externalMethods +  "," + exName + "," + exThrown + "," + modi + "," + lines;
+                + externalMethods +  "," + exName + "," + exThrown + "," + modi + "," + lines + "," + cyclomaticComplexity;
 
         return result;
     }
-
 }
