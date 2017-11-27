@@ -25,11 +25,17 @@ public class CollectMetrics extends AbstractMojo{
     public void execute() throws MojoExecutionException, MojoFailureException {
         // folder path
         String arg = inputPath.getParent();
+
+        // folder's parent
+        String fParent = inputPath.getParentFile().getParentFile().getParent();
+
         // file name
         String fName = inputPath.getParentFile().getName();
 
+        String folder = fParent + "/resource/" + fName;
+
         FindAllClassFile className = new FindAllClassFile();
-        List<String> classFileNames = className.findAllClassFile(arg);
+        List<String> classFileNames = className.findAllClassFile(folder);
 
         String[] header = {"Method Name",
                 "Number Of Arguments", "Variable Declarations", "Variable References", "Halstead Length",
@@ -43,9 +49,9 @@ public class CollectMetrics extends AbstractMojo{
         // write to csv file
         // needed to be modified when write all the files
 
-        String dire = arg + "/result";
+        String dire = fParent + "/result";
 
-        String nameOfFile = arg + "/result/" + fName +  ".csv";
+        String nameOfFile = fParent + "/result/" + fName + ".csv";
 
         File directory = new File(dire);
 
@@ -56,6 +62,7 @@ public class CollectMetrics extends AbstractMojo{
         File file = new File(nameOfFile);
 
         CSVWriter csvWrite;
+
         try {
             csvWrite = new CSVWriter(new FileWriter(file));
 
@@ -77,8 +84,6 @@ public class CollectMetrics extends AbstractMojo{
                     try {
                         metrics = collectMetrics(classNode, method);
 
-                        //                        System.out.println(metrics);
-
                         // add body
                         csvWrite.writeNext(metrics.split(","));
                     } catch (AnalyzerException e) {
@@ -92,7 +97,6 @@ public class CollectMetrics extends AbstractMojo{
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
     }
 
     private static String collectMetrics(ClassNode classNode, MethodNode method) throws AnalyzerException {
