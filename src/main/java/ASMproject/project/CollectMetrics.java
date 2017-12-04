@@ -1,7 +1,6 @@
 package ASMproject.project;
 
 import java.io.*;
-import java.nio.file.Files;
 import java.util.*;
 
 import com.opencsv.CSVWriter;
@@ -35,14 +34,14 @@ public class CollectMetrics extends AbstractMojo{
         String folder = fParent + "/resource/" + fName;
 
         FindAllClassFile className = new FindAllClassFile();
-        List<String> classFileNames = className.findAllClassFile(folder);
+        List<String> classFileNames = className.findAllClassFile(arg);
 
-        String[] header = {"Method Name",
-                "Number Of Arguments", "Variable Declarations", "Variable References", "Halstead Length",
-                "Halstead Vocabulary", " Halstead Volume",
-                "Halstead Difficulty", "Halstead Effort", "Halstead Bugs", "Number Of Casts", "Number Of Operators",
-                "Number Of Operands", "Class References", "External Methods", "Local Methods", "Exceptions Referenced",
-                "Exceptions Thrown", "Modifiers", "Lines Of Code", "Cyclomatic Complexity"};
+        String[] header = {"Method Name", "Cyclomatic Complexity", "Number Of Arguments", "Variable Declarations",
+                "Variable References", "Max depth of nesting", "Halstead Length", "Halstead Vocabulary",
+                "Halstead Volume", "Halstead Difficulty", "Halstead Effort", "Halstead Bugs", "Total depth of nesting",
+                "Number Of Casts", "Number of loops","Number Of Operators", "Number Of Operands", "Class References",
+                "External Methods", "Local Methods", "Exceptions Referenced", "Exceptions Thrown", "Modifiers",
+                "Lines Of Code"};
 
         //     System.out.println(String.join(",", Arrays.asList(header)));
 
@@ -106,6 +105,10 @@ public class CollectMetrics extends AbstractMojo{
         // collect class names and methods' names
         String methodName = String.format("%s.%s:%s", classNode.name, method.name, desAll);
 
+        // collect cyclomatic complexity
+        CyclomaticComplexity complexity = new CyclomaticComplexity();
+        int cyclomaticComplexity = complexity.getCyclomaticComplexity(classNode.name, method);
+
         // collect arguments
         Arguments arguments = new Arguments(null);
         method.accept(arguments);
@@ -117,6 +120,38 @@ public class CollectMetrics extends AbstractMojo{
         method.accept(vd);
         int variableDelarationNum = vd.getVariableDeclarationNum();
         int variableReferenceNum = vd.getVariableReferenceNum();
+
+        // collect number of loops
+        int numOfLoops = complexity.getNumberOfLoops(classNode.name, method);
+
+        // collect nesting
+        List<Integer> nestList = complexity.getNesting(classNode.name, method);
+
+        int maxDepthNesting = 0;
+        int totalDepthNesting = 0;
+
+        if(nestList != null){
+            if(nestList.size() == 1){
+                maxDepthNesting = nestList.get(0);
+            }
+            if(nestList.size() > 1){
+                for (int i = 0; i < nestList.size(); i++){
+                    if(nestList.get(i) > maxDepthNesting){
+                        maxDepthNesting = nestList.get(i);
+                    }
+                    totalDepthNesting = totalDepthNesting + nestList.get(i);
+                }
+            }
+        }
+
+        if (numOfLoops == 0){
+            maxDepthNesting = 0;
+            totalDepthNesting = 0;
+        }
+
+        if (totalDepthNesting > (numOfLoops * maxDepthNesting)){
+            totalDepthNesting = numOfLoops * maxDepthNesting;
+        }
 
         // collect Halstead length
         Halstead halstead = new Halstead(null);
@@ -227,16 +262,12 @@ public class CollectMetrics extends AbstractMojo{
         method.accept(lineCount);
         int lines = lineCount.getLines();
 
-        // collect cyclomatic complexity
-        CyclomaticComplexity complexity = new CyclomaticComplexity();
-        int cyclomaticComplexity = complexity.getCyclomaticComplexity(classNode.name, method);
-
-        String result = methodName + "," + numOfArguments + "," + variableDelarationNum +
-                "," + variableReferenceNum + ","+ halsteadLength + "," + halsteadVocabulary
-                + "," + halsteadVolume + "," + halsteadDifficulty + "," + halsteadEffort +
-                "," + halsteadBugs + "," + castingNum + "," + numOfOperators + "," +
-                numOfOperands + ","  + classReferenceNames + "," + localMethods + ","
-                + externalMethods +  "," + exName + "," + exThrown + "," + modi + "," + lines + "," + cyclomaticComplexity;
+        String result = methodName + "," + cyclomaticComplexity + "," + numOfArguments + "," + variableDelarationNum +
+                "," + variableReferenceNum +"," + maxDepthNesting + ","+ halsteadLength + "," + halsteadVocabulary
+                + "," + halsteadVolume + "," + halsteadDifficulty + "," + halsteadEffort + "," + halsteadBugs + ","
+                + totalDepthNesting+ "," + castingNum + "," + numOfLoops + "," + numOfOperators + "," + numOfOperands
+                + ","  + classReferenceNames + "," + localMethods + "," + externalMethods +  "," + exName + "," +
+                exThrown + "," + modi + "," + lines ;
 
         return result;
     }
