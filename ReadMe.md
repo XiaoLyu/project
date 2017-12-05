@@ -9,16 +9,17 @@ Configure testing project pom.xml file by inserting:
 
 
 
-
-\*<build>
-    \*<plugins>
-        \*<plugin>
-            \*<groupId>ASMproject</groupId>
-            \*<artifactId>project</artifactId>
-            \*<version>0.0.1-SNAPSHOT</version>
-        \*</plugin>
-      \*<plugins>
-\*</build>
+'''xml
+<build>
+    <plugins>
+        <plugin>
+            <groupId>ASMproject</groupId>
+            <artifactId>project</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </plugin>
+      <plugins>
+</build>
+'''
 
 
 And then go to the project folder which you want to test under /resouce folder, run:
