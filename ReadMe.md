@@ -7,6 +7,7 @@ Create a folder names 'resource' in the main directory, add those compiled testi
 
 Configure testing project pom.xml file by inserting:
 
+<code>
 <build>
     <plugins>
         <plugin>
@@ -16,6 +17,7 @@ Configure testing project pom.xml file by inserting:
         </plugin>
       <plugins>
 </build>
+</code>
 
 And then go to the project folder which you want to test under /resouce folder, run:
 mvn ASMproject:project:0.0.1-SNAPSHOT:collectMetrics
