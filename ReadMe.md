@@ -9,7 +9,7 @@ Configure testing project pom.xml file by inserting:
 
 
 
-'
+```
 <build>
     <plugins>
         <plugin>
@@ -19,7 +19,7 @@ Configure testing project pom.xml file by inserting:
         </plugin>
       <plugins>
 </build>
-'
+```
 
 
 And then go to the project folder which you want to test under /resouce folder, run:
