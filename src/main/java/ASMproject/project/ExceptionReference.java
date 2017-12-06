@@ -16,7 +16,7 @@ public class ExceptionReference extends ClassVisitor implements Opcodes {
         super(ASM5, cv);
     }
 
-    private List<String> exceptionsNameList = new ArrayList<>();
+    private List<String> exceptionsNameList = new ArrayList<String>();
     private String exceptionsName = "";
     private String temp = "";
 

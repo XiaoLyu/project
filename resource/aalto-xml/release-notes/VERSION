@@ -1,0 +1,123 @@
+Project: aalto-xml
+
+------------------------------------------------------------------------
+= Releases
+------------------------------------------------------------------------
+
+1.0.0 (23-Nov-2015)
+
+#29: Multi-threading bug in XmlScanner/FixedNsContext
+ (reported by Barry C, bcoughlan
+#32: ByteXmlWriter bug
+ (reported by ukmtk@github)
+#34: DTD Id parsing issue for public ids
+ (contributed by Adam R)
+
+0.9.11 (26-Feb-2015)
+
+#8: Improve error-reporting when trying to use `getElementText()` on
+  async parser
+#10: Support for capturing EVENT_INCOMPLETE with XMLEventReader
+ (suggested by Henry S, bblfish@github)
+#23: Fix buffer-smashing bug in loadAndRetain()
+ (reported by Steven T, stebulus@github)
+#26: `ByteXmlWriter` outputs extra characters on buffer boundaries
+ (reported by Vasily K, elDracoRus@github)
+#27: com.fasterxml.aalto.WFCException: Illegal XML character ((CTRL-CHAR, code 128))
+ (reported by Ilya, intracer@github)
+- Fix a bug with `AsyncXMLInputFactory.createAsyncFor(byte[])`; was not feeding
+  initial input.
+- Update to Stax2-api 4.0.0 (no major changes but has working generic signatures)
+
+0.9.10 (23-Feb-2015)
+
+#18: Improve location handling, access
+ (requested by "wanghaopu@github")
+- Refactored async API/implementation, to allow ByteBuffer-backed sources
+
+0.9.9 (19-Aug-2013)
+
+#15: Allow handling of illegal XML characters using `IllegalCharHandler` (configurable)
+ (contributed by jakeri@github)
+#21: Remove JAXP/SAX auto-registration from META-INF, to avoid conflicts
+ (suggested by Dave P)
+* Minor improvement to `AsyncUtfScanner.handleNsValuePending()` to avoid problems
+  with split (across chunk boundary) namespace declaration.
+
+
+0.9.8 [08-Apr-2012]
+
+* #4: Added SAXParserFactoryImpl.newInstance(), to reduce likelihood of getting a
+    non-Aalto factory.
+* #6: Fix ordering problem wrt public/system ids, ReaderConfig construction
+* #9: Handle SAX property "document-xml-version" properly
+* #12: Fix a bug in async attribute parsing, related to multi-byte UTF-8 char handling
+
+0.9.7 [11-Feb-2011]
+
+* Finally complete non-blocking ("async") parser interface (with
+  AsyncXMLInputFactory, AsyncXMLStreamReader) and implementation
+  (only missing coalescing mode, and some aspects of entity handling)
+
+0.9.6 [11-Oct-2010]
+
+* Build system converted to use Maven for easier deployment; OSGi bundle,
+  moved home page to [http://wiki.fasterxml.com/AaltoHome]
+
+0.9.5 [20-Mar-2009]
+
+* Licensing change to basic Apache License 2.0
+* Moved code under "com.fasterxml.aalto" Java package.
+
+0.9.4 [04-Feb-2009]
+
+* Namespace-repairing mode for stream writers implemented.
+* Coalescing mode implemented for blocking parsers (can not implement
+  for non-blocking, as coalescing requires blocking).
+* Partial implementation of Stax2 Validation API for stream writers.
+
+0.9.3 [21-Jan-2009]
+
+* A problem with comments content skipping (when underlying scanner
+  is Readers based) fixed: would surface parts of comment content as
+  regular text.
+* Auto-closing (XMLInputFactory2#P_AUTO_CLOSE_INPUT and
+  XMLOutputFactory2#P_AUTO_CLOSE_OUTPUT) wasn't working properly, now is.
+* An IndexOutOfBounds problem with character (Writer) backed
+  XMLStreamWriter, writeCharacters(char[],int,int) fixed.
+* Complete implementation of Stax2 3.0 Typed Access API.
+
+0.9.2 [08-May-2008]
+
+* Fixed stax conformance issue wrt. returning of no prefix/namespace URI;
+  now returns "" as expected instead of nulls.
+* XMLStreamReader2.getDepth() was off by one for END_ELEMENT events.
+* Character escaping was not fully working for attribute values.
+* Whitespace was reported in prolog: now gets properly stripped off
+  (could implement Stax2 REPORT_WS_IN_PROLOG in future if needed)
+* Now disables lazy parsing for event readers, SAX reader, to improve
+  accuracy of error reporting (and possible minor performance benefit too)
+* Added stax2test unit test suite from Woodstox, for additional
+  test coverage via stax2 API.
+* Implemented first (incomplete) version of Stax2 3.0 Typed Access API
+  (using Stax2 reference implementation's support): readers and writers
+  for int, long, boolean.
+
+0.9.1 [13-Mar-2008]
+
+* XMLStreamReader (blocking) implementation:
+  * Implemented non-lazy parsing functionality (still defaults to lazy
+    parsing so that skipping can be done efficiently).
+  * Minor performance improvements to name parsing.
+  * Minor performance improvements to namespace URI handling.
+* AsyncByteScanner:
+  * Location information was not properly updated when input was being
+    added, leading to useless location info for error messages.
+  * Handling of comments, PIs was incomplete, completed.
+
+0.9.0 [21-Feb-2008]
+
+First public release: contains functional non-DTD-handling reader
+implementation (although lacking coalescing mode), non-repairing
+stream writer, and a non-robust prototype version of non-blocking
+(asynchronous) stream reader.

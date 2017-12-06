@@ -11,7 +11,7 @@ import java.util.List;
  * Created by lyuxiao on 10/25/17.
  */
 public class Modifiers extends ClassVisitor implements Opcodes {
-    private List<String> modifier = new ArrayList<>();
+    private List<String> modifier = new ArrayList<String>();
 
     public Modifiers(ClassVisitor cv) {
         super(ASM5, cv);

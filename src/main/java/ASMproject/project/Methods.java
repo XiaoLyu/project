@@ -16,12 +16,13 @@ public class Methods extends MethodVisitor implements Opcodes {
         super(ASM5, mv);
     }
 
-    private List<String> classNameList = new ArrayList<>();
-    private List<String> methodList = new ArrayList<>();
+    private List<String> classNameList = new ArrayList<String>();
+    private List<String> methodList = new ArrayList<String>();
 
     // store invoke method [methodOwner, methodName]
-    private List<String[]> methodInfo = new ArrayList<>();
+    private List<String[]> methodInfo = new ArrayList<String[]>();
     private String[] temp = new String[2];
+    private String descriptorName = "";
 
     @Override
     public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
@@ -31,11 +32,12 @@ public class Methods extends MethodVisitor implements Opcodes {
         super.visitMethodInsn(opcode, owner, name, desc, itf);
     }
 
-    public List<String> getClassNameList(){
+    public List<String> getClassNameList() {
         return classNameList;
     }
 
-    public List<String> getMethodList(){
+    public List<String> getMethodList() {
         return methodList;
     }
+
 }
