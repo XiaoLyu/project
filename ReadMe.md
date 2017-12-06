@@ -7,7 +7,6 @@ Create a folder names 'resource' in the main directory, add those compiled testi
 
 Configure testing project pom.xml file by inserting:
 
-
 ```
 <build>
     <plugins>

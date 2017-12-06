@@ -104,11 +104,6 @@
     <build>
         <pluginManagement>
           <plugins>
-            <plugin>
-                <groupId>ASMproject</groupId>
-                <artifactId>project</artifactId>
-                <version>0.0.1-SNAPSHOT</version>
-            </plugin>
 
             <plugin>
               <groupId>org.apache.maven.plugins</groupId>
