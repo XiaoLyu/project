@@ -114,7 +114,7 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/ASMproject/project/CollectMetrics.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.43378997" vertical-offset="75" max-vertical-offset="4005">
-              <caret line="37" column="68" selection-start-line="37" selection-start-column="65" selection-end-line="37" selection-end-column="68" />
+              <caret line="37" column="72" selection-start-line="37" selection-start-column="72" selection-end-line="37" selection-end-column="72" />
               <folding />
             </state>
           </provider>
@@ -617,12 +617,12 @@
       <workItem from="1512489882999" duration="2992000" />
       <workItem from="1512533256043" duration="28000" />
       <workItem from="1512533810227" duration="468000" />
-      <workItem from="1512534469949" duration="668000" />
+      <workItem from="1512534469949" duration="1630000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="214623000" />
+    <option name="totallyTimeSpent" value="215585000" />
   </component>
   <component name="TodoView" selected-index="0">
     <todo-panel id="selected-file">
@@ -1114,7 +1114,7 @@
     <entry file="file://$PROJECT_DIR$/src/main/java/ASMproject/project/CollectMetrics.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.43378997" vertical-offset="75" max-vertical-offset="4005">
-          <caret line="37" column="68" selection-start-line="37" selection-start-column="65" selection-end-line="37" selection-end-column="68" />
+          <caret line="37" column="72" selection-start-line="37" selection-start-column="72" selection-end-line="37" selection-end-column="72" />
           <folding />
         </state>
       </provider>
