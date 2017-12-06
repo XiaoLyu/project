@@ -32,9 +32,10 @@ public class CollectMetrics extends AbstractMojo{
         String fName = inputPath.getParentFile().getName();
 
         String folder = fParent + "/resource/" + fName;
+        String ftarget = fParent + "/target";
 
         FindAllClassFile className = new FindAllClassFile();
-        List<String> classFileNames = className.findAllClassFile(arg);
+        List<String> classFileNames = className.findAllClassFile(ftarget);
 
         String[] header = {"Method Name", "Cyclomatic Complexity", "Number Of Arguments", "Variable Declarations",
                 "Variable References", "Max depth of nesting", "Halstead Length", "Halstead Vocabulary",
