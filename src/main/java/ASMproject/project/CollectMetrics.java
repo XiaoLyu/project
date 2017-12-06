@@ -32,7 +32,7 @@ public class CollectMetrics extends AbstractMojo{
         String fName = inputPath.getParentFile().getName();
 
         String folder = fParent + "/resource/" + fName;
-        String ftarget = fParent + "/target";
+        String ftarget = folder + "/target";
 
         FindAllClassFile className = new FindAllClassFile();
         List<String> classFileNames = className.findAllClassFile(ftarget);
