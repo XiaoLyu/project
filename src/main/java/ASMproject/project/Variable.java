@@ -26,7 +26,7 @@ public class Variable extends MethodVisitor implements Opcodes {
     public void visitLocalVariable(String name, String desc, String signature, Label start, Label end, int index) {
 
         // get rid of those primitive data types (the descriptors of them are single)
-        if(!name.equals("this")){
+        if(!name.equals("this") && !name.equals("args")){
             variableDeclarationNum++;
             if(desc.length() > 1){
                 variableReferenceNum ++;
